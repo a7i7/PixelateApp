@@ -1,4 +1,4 @@
-package com.sunshine.android.com.pixelate;
+package com.a7i7Dev.android.com.pixelate;
 
 import org.junit.Test;
 

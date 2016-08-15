@@ -1,4 +1,4 @@
-package com.sunshine.android.com.pixelate;
+package com.a7i7Dev.android.com.pixelate;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -10,14 +10,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import java.io.File;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private int PICK_IMAGE = 2;
     private int CAPTURE_IMAGE = 1;
-
+    private int PICK_IMAGE = 2;
     private Uri imageUri;
 
     @Override
