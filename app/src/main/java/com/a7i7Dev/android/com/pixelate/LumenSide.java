@@ -1,7 +1,5 @@
 package com.a7i7Dev.android.com.pixelate;
-
 import android.graphics.Color;
-
 
 public class LumenSide extends PixelEffect {
 

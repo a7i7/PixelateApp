@@ -8,32 +8,31 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.a7i7Dev.android.com.pixelate.MainActivity"
-    >
+    tools:context="com.a7i7Dev.android.com.pixelate.MainActivity">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Open Gallery"
         android:id="@+id/galleryButton"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="false"
+        android:layout_above="@+id/cameraButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="0dp"
         android:width="200dp"
         android:height="50dp"
-        android:onClick="onClickGalleryButton"
-        />
+        android:onClick="onClickGalleryButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Camera"
         android:id="@+id/cameraButton"
-        android:layout_below="@+id/galleryButton"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:layout_marginTop="5dp"
         android:width="200dp"
         android:height="50dp"
-        android:onClick="onClickCameraButton"
-        />
+        android:onClick="onClickCameraButton" />
+
 </RelativeLayout>

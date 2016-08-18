@@ -7,7 +7,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context="com.a7i7Dev.android.com.pixelate.CameraActivity">
+    tools:context=".DashboardActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -17,10 +17,18 @@
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/effectSpinner" />
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/effectSpinner"
+        android:layout_above="@+id/seekBar"
+        android:layout_centerHorizontal="true" />
+
     <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/seekBar"
+        android:thumbTint="#FFFF00"
         android:layout_above="@+id/startButton"
         android:layout_centerHorizontal="true" />
 
@@ -54,14 +62,5 @@
         android:minHeight="5dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/effectSpinner"
-        android:layout_above="@+id/seekBar"
-        android:layout_centerHorizontal="true"
-        android:visibility="visible" />
-
 
 </RelativeLayout>

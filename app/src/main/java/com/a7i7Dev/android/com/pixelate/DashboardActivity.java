@@ -14,17 +14,15 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class CameraActivity extends AppCompatActivity {
+public class DashboardActivity extends AppCompatActivity {
 
     protected static ProgressBar mProgress;
     private Pixelator pixelator;
@@ -36,6 +34,9 @@ public class CameraActivity extends AppCompatActivity {
     private Thread progressBarThread;
     private Spinner effectSpinner;
     private static String[] effectNames = {"Plain Fill", "Mushy", "Lumen Center", "Lumen Side"};
+
+    private boolean keepUpdatingProgressBar = true;
+
     public void savePixelatedImage(View view)
     {
         if(pixelator!=null && pixelator.getStatus()==Pixelator.FINISHED) {
@@ -65,18 +66,23 @@ public class CameraActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Result not yet ready",Toast.LENGTH_LONG).show();
     }
 
-    public void startEffects(View view)
+    private void stopWork()
     {
         if(pixelator!=null && pixelator.getStatus()==Pixelator.RUNNING)
         {
             pixelator.stopRunning();    //stops pixelatorThread
-            pixelator=null;             //stops progressBarThread
+            keepUpdatingProgressBar = false;    //stops progressBarThread
             mProgress.setProgress(0);
         }
+    }
 
+    public void startEffects(View view)
+    {
+        stopWork();
         final int pixelSize = pixelSizeBar.getProgress() + 1;
         PixelEffect pixelEffect = null;
         String chosenEffect = effectSpinner.getSelectedItem().toString();
+        keepUpdatingProgressBar = true;
 
         if(chosenEffect.equals("Plain Fill"))
             pixelEffect = new PlainFill(pixelSize);
@@ -84,13 +90,14 @@ public class CameraActivity extends AppCompatActivity {
             pixelEffect = new Mushy(pixelSize);
         else if(chosenEffect.equals("Lumen Center"))
             pixelEffect = new LumenCenter(pixelSize);
-        else
+        else if(chosenEffect.equals("Lumen Side"))
             pixelEffect = new LumenSide(pixelSize);
 
         pixelator = new Pixelator(inputBitmap, pixelEffect, pixelSize);
 
         pixelatorThread = new Thread(new Runnable() {
             public void run() {
+                while(pixelator==null);
                 pixelator.pixelateImage();
             }
         });
@@ -99,14 +106,14 @@ public class CameraActivity extends AppCompatActivity {
         progressBarThread = new Thread(new Runnable() {
             public void run() {
 
-                while(pixelator==null || pixelator.getPercentComplete()<100) {
-                    if (pixelator == null)
-                        continue;
-                    mProgress.setProgress(pixelator.getPercentComplete());
-                }
-                mProgress.setProgress(0);
+                while(keepUpdatingProgressBar && (pixelator==null || pixelator.getPercentComplete()<100) ) {
 
-                CameraActivity.this.runOnUiThread(new Runnable() {
+                    if(pixelator!=null)
+                        mProgress.setProgress(pixelator.getPercentComplete());
+                }
+
+                mProgress.setProgress(0);
+                DashboardActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         imageView.setImageBitmap(pixelator.getPixelatedImage());
@@ -114,6 +121,7 @@ public class CameraActivity extends AppCompatActivity {
                 });
             }
         });
+        progressBarThread.setPriority(Thread.MIN_PRIORITY);
         progressBarThread.start();
     }
 
@@ -129,7 +137,7 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_dashboard);
         addEffectsOnSpinner();
         mProgress = (ProgressBar) findViewById(R.id.progressBar);
         imageView = (ImageView) findViewById(R.id.inputImageView);
@@ -151,4 +159,17 @@ public class CameraActivity extends AppCompatActivity {
             inputBitmap = inputBitmap.copy(Bitmap.Config.ARGB_8888, true);
         imageView.setImageBitmap(inputBitmap);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopWork();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopWork();
+    }
+
 }

@@ -1,5 +1,4 @@
 package com.a7i7Dev.android.com.pixelate;
-
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +7,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(inputPhoto!=null)
         {
-            Intent i = new Intent(this,CameraActivity.class);
+            Intent i = new Intent(this,DashboardActivity.class);
             i.putExtra("IMAGE_URI",imageUri);
             startActivity(i);
         }

@@ -1,8 +1,6 @@
 package com.a7i7Dev.android.com.pixelate;
-
 import android.graphics.Bitmap;
 import android.graphics.Color;
-
 
 public class Pixelator {
 
@@ -44,9 +42,9 @@ public class Pixelator {
         int width = inputImage.getWidth();
         for(int x=0; x<height && keepRunning; x+=pixelSize)
         {
-            percentComplete = (x*100)/height;
             for(int y=0; y<width && keepRunning; y+=pixelSize)
             {
+                percentComplete = (100*(x*width+y))/(height*width);
                 int x1 = x, y1 = y;
                 int x2 = Math.min(height, x+pixelSize), y2 = Math.min(width, y+pixelSize);
                 int rAvg = 0, gAvg = 0, bAvg = 0;
