@@ -11,26 +11,57 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/inputImageView"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/effectSpinner" />
 
-    <ProgressBar
-        style="@android:style/Widget.ProgressBar.Horizontal"
+    <SeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_alignParentBottom="true"
+        android:id="@+id/seekBar"
+        android:layout_above="@+id/startButton"
         android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Pixelating"
-        android:id="@+id/button"
+        android:text="Save"
+        android:id="@+id/saveButton"
         android:layout_above="@+id/progressBar"
+        android:onClick="savePixelatedImage"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Pixelating"
+        android:id="@+id/startButton"
+        android:layout_above="@+id/progressBar"
+        android:layout_toRightOf="@+id/saveButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="startEffects" />
+
+    <ProgressBar
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:maxHeight="5dp"
+        android:minHeight="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/effectSpinner"
+        android:layout_above="@+id/seekBar"
         android:layout_centerHorizontal="true"
-        android:onClick="startEffects"/>
+        android:visibility="visible" />
+
+
 </RelativeLayout>

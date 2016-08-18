@@ -2,9 +2,6 @@ package com.a7i7Dev.android.com.pixelate;
 
 import android.graphics.Color;
 
-/**
- * Created by Welcome on 14-08-2016.
- */
 
 public class PlainFill extends PixelEffect
 {
@@ -17,8 +14,8 @@ public class PlainFill extends PixelEffect
         this.pixelSize = pixelSize;
     }
 
-    public int getPixel(int x,int y)
-    {
+    @Override
+    public int getPixel(int x,int y) {
         return Color.rgb(r,g,b);
     }
 

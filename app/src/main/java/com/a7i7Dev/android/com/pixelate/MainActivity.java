@@ -8,7 +8,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 
 import java.io.IOException;
 
@@ -24,53 +23,38 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         Bitmap inputPhoto = null;
-        if ( requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null && data.getData() != null)
-        {
-            imageUri = data.getData();
-            try
-            {
-                inputPhoto = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-        else if (requestCode == CAPTURE_IMAGE && resultCode == RESULT_OK) {
-            try
-            {
-                inputPhoto = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-            }
-            catch(IOException e)
-            {
-                    e.printStackTrace();
-            }
-        }
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageBitmap(inputPhoto);
+        if(resultCode!=RESULT_OK || (requestCode!=PICK_IMAGE && requestCode!=CAPTURE_IMAGE))
+            return;
+
+        if ( requestCode == PICK_IMAGE && data != null && data.getData() != null)
+            imageUri = data.getData();
+
+        try
+        {
+            inputPhoto = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
 
         if(inputPhoto!=null)
         {
-            CameraActivity.cr = getContentResolver();
             Intent i = new Intent(this,CameraActivity.class);
             i.putExtra("IMAGE_URI",imageUri);
             startActivity(i);
         }
     }
 
-
     public void onClickGalleryButton(View view)
     {
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
-
         Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickIntent.setType("image/*");
-
         Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-
         startActivityForResult(chooserIntent, PICK_IMAGE);
     }
 

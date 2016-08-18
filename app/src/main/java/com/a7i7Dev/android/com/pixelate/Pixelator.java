@@ -3,45 +3,54 @@ package com.a7i7Dev.android.com.pixelate;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
-/**
- * Created by Welcome on 14-08-2016.
- */
+
 public class Pixelator {
 
     private Bitmap inputImage;
     private Bitmap outputImage;
     private int pixelSize;
     private PixelEffect pixelEffect;
+    private int status;
     public int percentComplete;
 
-    Pixelator(Bitmap inputImage,PixelEffect pixelEffect,int pixelSize)
-    {
+    public static final int NOT_STARTED = 0;
+    public static final int RUNNING = 1;
+    public static final int FINISHED = 2;
+
+    private boolean keepRunning;
+
+    Pixelator(Bitmap inputImage,PixelEffect pixelEffect,int pixelSize) {
         this.inputImage = inputImage;
         this.pixelEffect = pixelEffect;
         this.outputImage = inputImage.copy(Bitmap.Config.ARGB_8888, true);
         this.pixelSize = pixelSize;
         this.percentComplete = 0;
+        this.status = NOT_STARTED;
+        this.keepRunning = true;
     }
 
-    public int getPercentComplete()
+    public void stopRunning()
     {
+        keepRunning = false;
+    }
+
+    public int getPercentComplete() {
         return percentComplete;
     }
 
-    public Bitmap pixelateImage()
-    {
+    public Bitmap pixelateImage() {
+        this.status = RUNNING;
         int height = inputImage.getHeight();
         int width = inputImage.getWidth();
-        for(int x=0;x<inputImage.getHeight();x+=pixelSize)
+        for(int x=0; x<height && keepRunning; x+=pixelSize)
         {
             percentComplete = (x*100)/height;
-            for(int y=0;y<inputImage.getWidth();y+=pixelSize)
+            for(int y=0; y<width && keepRunning; y+=pixelSize)
             {
                 int x1 = x, y1 = y;
                 int x2 = Math.min(height, x+pixelSize), y2 = Math.min(width, y+pixelSize);
-                float rAvg = 0.0f, gAvg = 0.0f, bAvg = 0.0f;
+                int rAvg = 0, gAvg = 0, bAvg = 0;
                 int numPixels = (x2-x1)*(y2-y1);
-
                 for(int p=x1;p<x2;p++)
                 {
                     for(int q=y1;q<y2;q++)
@@ -56,9 +65,9 @@ public class Pixelator {
                 gAvg/=numPixels;
                 bAvg/=numPixels;
 
-                int r = Math.round(rAvg);
-                int g = Math.round(gAvg);
-                int b = Math.round(bAvg);
+                int r = rAvg;
+                int g = gAvg;
+                int b = bAvg;
 
                 pixelEffect.refresh(r,g,b);
 
@@ -73,12 +82,19 @@ public class Pixelator {
             }
         }
         percentComplete = 100;
+        this.status = FINISHED;
         return outputImage;
     }
 
-    public Bitmap getPixelatedImage()
+    public int getStatus()
     {
-        return outputImage;
+        return status;
+    }
+
+    public Bitmap getPixelatedImage() {
+        if(status==FINISHED)
+            return outputImage;
+        return null;
     }
 
 }
